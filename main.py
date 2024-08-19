@@ -24,7 +24,7 @@ def submit():
                     "content": user_input,
                 }
             ],
-            model="llama3-8b-8192",
+            model="llama-3.1-70b-versatile",
         )
         response = chat_completion.choices[0].message.content
     except Exception as e:
