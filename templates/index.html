@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Form</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 800px;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+        input[type="text"], #responseBox {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        input[type="text"] {
+            flex: 0 0 auto;
+        }
+        #responseBox {
+            flex: 1 1 auto;
+            resize: none;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            align-self: flex-end;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <form id="inputForm">
+        <input type="text" id="userInput" name="userInput" placeholder="Enter your text here">
+        <textarea id="responseBox" readonly placeholder="Response will appear here"></textarea>
+        <input type="submit" value="Submit">
+    </form>
+
+    <script>
+        document.getElementById('inputForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            var userInput = document.getElementById('userInput').value;
+            var responseBox = document.getElementById('responseBox');
+
+            responseBox.value = 'Processing...';
+
+            fetch('/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({userInput: userInput})
+            })
+            .then(response => response.json())
+            .then(data => {
+                responseBox.value = data.response;
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                responseBox.value = 'An error occurred. Please try again.';
+            });
+        });
+    </script>
+</body>
+</html>
